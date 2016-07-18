@@ -1,4 +1,7 @@
 var express = require('express');
+var session = require('express-session');
+var cookieParser = require('cookie-parser');
+var partials = require('express-partials');
 var app = express();
 var routes = require('./routes');
 var errorHandlers = require('./middleware/errorhandlers');
@@ -8,6 +11,23 @@ var log = require('./middleware/log');
 app.set('view engine', 'ejs');
 app.use(log.logger);
 app.use(express.static(__dirname + '/static'));
+app.use(cookieParser());
+app.use(session({
+    secret: 'copycat',
+    resave: true,
+    saveUninitialized: true
+}));
+
+app.use(function(req, res, next) {
+    if (req.session.pageCount) {
+        req.session.pageCount++;
+    } else {
+        req.session.pageCount = 1;
+    }
+    next();
+})
+app.use(partials());
+app.set('view options', {defaultLayout: 'layout'});
 // app.get('*', function(req, res) {
 //     res.send('Express Response');
 // });

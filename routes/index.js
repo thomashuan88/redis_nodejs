@@ -11,7 +11,8 @@ function index(req, res) {
         title: 'Index', 
         cookie: JSON.stringify(req.cookies),
         session: JSON.stringify(req.session),
-        pagecount: req.session.pageCount
+        pagecount: req.session.pageCount,
+        signedCookie: JSON.stringify(req.signedCookies)
     });
 };
 

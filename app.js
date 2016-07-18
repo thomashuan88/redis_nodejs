@@ -1,5 +1,6 @@
 var express = require('express');
 var session = require('express-session');
+var RedisStore = require('connect-redis')(session);
 var cookieParser = require('cookie-parser');
 var partials = require('express-partials');
 var app = express();
@@ -11,11 +12,14 @@ var log = require('./middleware/log');
 app.set('view engine', 'ejs');
 app.use(log.logger);
 app.use(express.static(__dirname + '/static'));
-app.use(cookieParser());
+app.use(cookieParser('copycat'));
 app.use(session({
     secret: 'copycat',
     resave: true,
-    saveUninitialized: true
+    saveUninitialized: true,
+    store: new RedisStore({
+        url: 'redis://localhost'
+    })
 }));
 
 app.use(function(req, res, next) {

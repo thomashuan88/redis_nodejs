@@ -9,7 +9,7 @@ var app = express();
 var routes = require('./routes');
 var errorHandlers = require('./middleware/errorhandlers');
 var log = require('./middleware/log');
-// var util = require('./middleware/utilities');
+var util = require('./middleware/utilities');
 
 
 app.set('view engine', 'ejs');
@@ -28,7 +28,9 @@ app.use(session({
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(csrf({ cookie: true }));
-// app.use(util.csrf);
+app.use(util.csrf);
+app.use(util.authenticated);
+
 
 // var csrfProtection = csrf({ cookie: true });
 
@@ -49,10 +51,11 @@ app.set('view options', {defaultLayout: 'layout'});
 app.get('/', routes.index);
 app.get('/login', routes.login);
 app.post('/login', routes.loginProcess);
-app.get('/chat', routes.chat);
+app.get('/chat', [util.requireAuthentication], routes.chat);
 app.get('/error', function(req, res, next) {
     next(new Error('A contrived error'));
 });
+app.get('/logout', routes.logOut);
 
 app.use(errorHandlers.error);
 app.use(errorHandlers.notFound);

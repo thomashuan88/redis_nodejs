@@ -1,3 +1,5 @@
+var util = require('../middleware/utilities');
+
 module.exports.index = index;
 module.exports.login = login;
 module.exports.loginProcess = loginProcess;
@@ -21,14 +23,25 @@ function index(req, res) {
 };
 
 function login(req, res) {
-    res.render('login', { layout: 'layout', title: 'Login', token: req.csrfToken() });
+    res.render('login', { layout: 'layout', title: 'Login' });
 };
 
 function loginProcess(req, res) {
-    console.log(req.body);
-    res.send(req.body.username + ' ' + req.body.password);
+    // console.log(req.body);
+    // res.send(req.body.username + ' ' + req.body.password);
+    var isAuth = util.auth(req.body.username, req.body.password, req.session);
+    if (isAuth) {
+        res.redirect('/chat');
+    } else {
+        res.redirect('/login');
+    }
 };
 
 function chat(req, res) {
     res.render('chat', { layout: 'layout', title: 'Chat'});
+};
+
+function logOut(req, res) {
+    util.logOut(req.session);
+    res.redirect('/');
 };

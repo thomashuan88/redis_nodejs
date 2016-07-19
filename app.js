@@ -27,10 +27,10 @@ app.use(session({
 }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-// app.use(csrf({ cookie: true }));
+app.use(csrf({ cookie: true }));
 // app.use(util.csrf);
 
-var csrfProtection = csrf({ cookie: true });
+// var csrfProtection = csrf({ cookie: true });
 
 app.use(function(req, res, next) {
     if (req.session.pageCount) {
@@ -47,8 +47,8 @@ app.set('view options', {defaultLayout: 'layout'});
 // });
 
 app.get('/', routes.index);
-app.get('/login', csrfProtection, routes.login);
-app.post('/login', csrfProtection, routes.loginProcess);
+app.get('/login', routes.login);
+app.post('/login', routes.loginProcess);
 app.get('/chat', routes.chat);
 app.get('/error', function(req, res, next) {
     next(new Error('A contrived error'));

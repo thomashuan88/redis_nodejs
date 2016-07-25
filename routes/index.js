@@ -4,6 +4,7 @@ module.exports.index = index;
 module.exports.login = login;
 module.exports.loginProcess = loginProcess;
 module.exports.chat = chat;
+module.exports.logOut = logOut;
 
 function index(req, res) {
     res.cookie('IndexCookie', 'This was set from Index');
@@ -23,7 +24,7 @@ function index(req, res) {
 };
 
 function login(req, res) {
-    res.render('login', { layout: 'layout', title: 'Login' });
+    res.render('login', { layout: 'layout', title: 'Login', message: req.flash('error') });
 };
 
 function loginProcess(req, res) {
@@ -33,7 +34,8 @@ function loginProcess(req, res) {
     if (isAuth) {
         res.redirect('/chat');
     } else {
-        res.redirect('/login');
+        req.flash('error', 'Wrong Username or Password')
+        res.redirect(config.routes.login);
     }
 };
 

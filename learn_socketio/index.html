@@ -3,12 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <title>Ping Pong</title>
-    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-    <script src="/socket.io/socket.io.js" type="text/javascript"></script>
+    <script src="jquery-1.10.1.min.js"></script>
+    <script src="node_modules/socket.io-client/socket.io.js" type="text/javascript"></script>
 </head>
 <body>
     <h1>Communicating with socket .io</h1>
-    <p><input type="button" id="poke" value="Poke" the="" server=""></p>
+    <!-- <p><input type="button" id="poke" value="Poke" the="" server=""></p> -->
+    <input type="text" id="username">
+    <button id="ping">Ping</button>
+    <div id="sent"></div>
+    <ul id="info">
+        
+    </ul>
 <script>
     // var socket = io('http://192.168.10.10:8080');
 
@@ -16,15 +22,52 @@
     //     console.log('ping');
     //     socket.emit('pong');
     // });
-    var socket = io.connect('http://192.168.10.10:8080');
-    socket.on('message', function(message) {
-        alert('The server has a message for you: ' + message);
-        socket.emit('message', 'Hi server, how are you?');
+
+    // var socket = io.connect('http://192.168.10.10:8080');
+    // socket.on('message', function(message) {
+    //     alert('The server has a message for you: ' + message);
+    //     socket.emit('message', 'Hi server, how are you?');
+    // });
+
+    // $('#poke').click(function() {
+    //     socket.emit('message', 'Hi server, how are you?');
+    // });
+    $(function(){
+        var socket = io.connect('http://192.168.10.10:4000');
+        var $username = $('#username');
+        var $ping = $('#ping');
+        var $info = $('#info');
+        var $sent = $('#sent');
+        var pingSent = 0;
+
+        function addLi(message) {
+            $info.append('<li>' + message + '</li>');
+        };
+
+        socket.emit('join', { username: $username.val() });
+        $username.on('change', function() {
+            socket.emit('join', {username: $username.val() });
+        });
+
+        socket.on('userJoined', function(data) {
+            addLi(data.username + ' has joined');
+        });
+
+        $ping.on('click', function() {
+            socket.emit('ping', null, function(message) {
+                if (message === 'ack') {
+                    pingSent++;
+                    $sent.html('Ping : ' + pingSent);
+                }
+            })
+        });
+
+        socket.on('ping', function(data) {
+            addLi(data.username + ' has pinged');
+        });
     });
 
-    $('#poke').click(function() {
-        socket.emit('message', 'Hi server, how are you?');
-    });
+
 
 
 </script>

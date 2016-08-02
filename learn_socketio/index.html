@@ -40,11 +40,9 @@
         var $sent = $('#sent');
         var pingSent = 0;
 
-        function addLi(message) {
-            $info.append('<li>' + message + '</li>');
-        };
 
-        socket.emit('join', { username: $username.val() });
+
+        // socket.emit('join', { username: $username.val() });
         $username.on('change', function() {
             socket.emit('join', {username: $username.val() });
         });
@@ -54,17 +52,22 @@
         });
 
         $ping.on('click', function() {
-            socket.emit('ping', null, function(message) {
+            socket.emit('toserver', null, function(message) {
                 if (message === 'ack') {
                     pingSent++;
-                    $sent.html('Ping : ' + pingSent);
+                    $sent.html('Pings sent : ' + pingSent);
                 }
-            })
+            });
         });
 
-        socket.on('ping', function(data) {
+        socket.on('fromserver', function(data) {
             addLi(data.username + ' has pinged');
         });
+
+        function addLi(message) {
+            $info.append('<li>' + message + '</li>');
+        };
+
     });
 
 

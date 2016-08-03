@@ -60,9 +60,13 @@
             });
         });
 
-        socket.on('fromserver', function(data) {
+        socket.on('fromserver', function(data) { // ping
             addLi(data.username + ' has pinged');
         });
+
+        socket.on('userDisconnect', function(data) {
+            addLi(data.username + ' has left :(');
+        })
 
         function addLi(message) {
             $info.append('<li>' + message + '</li>');

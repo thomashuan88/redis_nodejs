@@ -8,7 +8,11 @@ io.sockets.on('connection', function(socket){
     socket.on('toserver', function(data, done) {
         socket.broadcast.emit('fromserver', {username: socket.username});
         done('ack');
-    })
+    });
+
+    socket.on('disconnect', function(){
+        socket.broadcast.emit('userDisconnect', { username: socket.username });
+    });
 
 });
 

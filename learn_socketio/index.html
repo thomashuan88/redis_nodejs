@@ -5,16 +5,52 @@
     <title>Ping Pong</title>
     <script src="jquery-1.10.1.min.js"></script>
     <script src="node_modules/socket.io-client/socket.io.js" type="text/javascript"></script>
+    <style>
+        .areas { float: left; width: 50%; }
+    </style>
 </head>
 <body>
     <h1>Communicating with socket .io</h1>
     <!-- <p><input type="button" id="poke" value="Poke" the="" server=""></p> -->
-    <input type="text" id="username">
-    <button id="ping">Ping</button>
-    <div id="sent"></div>
-    <ul id="info">
-        
-    </ul>
+    <div>
+        <input type="text" id="username">
+    </div>
+    <div class="areas default">
+        Default
+        <button class="join">Join</button>
+        <button class="ping">Ping</button>
+        <div>
+            Users
+            <ul class="users">
+                
+            </ul>
+        </div>
+        <div>
+            Events
+            <ul class="events">
+                
+            </ul>
+        </div>
+    </div>
+    
+    <div class="areas vip">
+        VIP
+        <button class="join">Join</button>
+        <button class="ping">Ping</button>
+        <div>
+            Users
+            <ul class="users">
+                
+            </ul>
+        </div>
+        <div>
+            Events
+            <ul class="events">
+                
+            </ul>
+        </div>
+    </div>
+
 <script>
     // var socket = io('http://192.168.10.10:8080');
 
@@ -32,6 +68,7 @@
     // $('#poke').click(function() {
     //     socket.emit('message', 'Hi server, how are you?');
     // });
+
     $(function(){
         var socket = io.connect('http://192.168.10.10:4000');
         var $username = $('#username');
@@ -73,7 +110,6 @@
         };
 
     });
-
 
 
 

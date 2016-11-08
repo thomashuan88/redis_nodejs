@@ -14,7 +14,12 @@ var tcpServer = net.createServer(function(socket) {
     socket.on('data', function(data) {
         console.log('data received from the tcp client');
         socket.write('Server Reply: '+data);
+        socket.emit('error', new Error('forcefully injected error'));
     });
+
+    socket.on('error', function(error) {
+        console.log('something wrong happened here');
+    })
 });
 
 tcpServer.maxConnections = 10; 

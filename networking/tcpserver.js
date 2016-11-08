@@ -3,6 +3,10 @@ var net = require('net');
 var tcpServer = net.createServer(function(socket) {
     console.log('connection established....');
 
+    tcpServer.getConnections(function(error, count) {
+        console.log('number of concurrent tcp connections = ' + count);
+    });
+
     socket.on('end', function() {
         console.log('server disconnected...');
     });
@@ -13,6 +17,7 @@ var tcpServer = net.createServer(function(socket) {
     });
 });
 
-tcpServer.listen(8111, function() {
-    console.log('server started listening...');
-});
+tcpServer.listen(function() {
+    var port = tcpServer.address().port
+    console.log('server started listening on port: ' + port);
+}); 

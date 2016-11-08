@@ -17,6 +17,8 @@ var tcpServer = net.createServer(function(socket) {
     });
 });
 
+tcpServer.maxConnections = 10; 
+
 tcpServer.listen(function() {
     var port = tcpServer.address().port
     console.log('server started listening on port: ' + port);

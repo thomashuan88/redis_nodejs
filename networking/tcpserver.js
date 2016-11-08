@@ -11,6 +11,10 @@ var tcpServer = net.createServer(function(socket) {
         console.log('server disconnected...');
     });
 
+    socket.on('close', function(){
+        console.log('closed event fired');
+    })
+
     socket.on('data', function(data) {
         console.log('data received from the tcp client');
         socket.write('Server Reply: '+data);
@@ -19,6 +23,8 @@ var tcpServer = net.createServer(function(socket) {
 
     socket.on('error', function(error) {
         console.log('something wrong happened here');
+        // socket.end('socket can send some more data but it will ended');
+        // socket.destroy();
     })
 });
 

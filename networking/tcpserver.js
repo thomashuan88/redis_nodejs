@@ -18,7 +18,7 @@ var tcpServer = net.createServer(function(socket) {
     socket.on('data', function(data) {
         console.log('data received from the tcp client');
         socket.write('Server Reply: '+data);
-        socket.emit('error', new Error('forcefully injected error'));
+        //socket.emit('error', new Error('forcefully injected error'));
     });
 
     socket.on('error', function(error) {
@@ -29,6 +29,12 @@ var tcpServer = net.createServer(function(socket) {
 });
 
 tcpServer.maxConnections = 10; 
+
+setTimeout(function() {
+    tcpServer.close(function() {
+        console.log('server closed');
+    });
+}, 60000);
 
 tcpServer.listen(function() {
     var port = tcpServer.address().port
